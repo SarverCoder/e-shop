@@ -1,4 +1,5 @@
-﻿using e_shop.Domain.Entities;
+﻿using e_shop.DataAccess.ModelConfigurations;
+using e_shop.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -15,6 +16,11 @@ namespace e_shop.DataAccess
         public DbSet<StaffRole> StaffRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
 
+        public ShopContext()
+        {
+            Database.EnsureCreated();
+        }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,41 +34,13 @@ namespace e_shop.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ProductCategory>()
-            .HasKey(pc => new
-            {
-                pc.ProductId,
-                pc.CategoryId
-            });
-
-            modelBuilder.Entity<ProductCategory>()
-                .HasOne(pc => pc.Product)
-                .WithMany(p => p.ProductCategories)
-                .HasForeignKey(pc => pc.ProductId);
-
-            modelBuilder.Entity<ProductCategory>()
-                .HasOne(pc => pc.Category)
-                .WithMany(c => c.ProductCategories)
-                .HasForeignKey(pc => pc.CategoryId);
 
 
+            modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductTagConfiguration());
+            modelBuilder.ApplyConfiguration(new StaffRoleConfiguration());
 
-            modelBuilder.Entity<ProductTag>()
-                .HasKey(pt => new
-                {
-                    pt.ProductId,
-                    pt.TagId
-                });
-
-            modelBuilder.Entity<ProductTag>()
-                .HasOne(pt => pt.Tag)
-                .WithMany(x => x.ProductTags)
-                .HasForeignKey(pt  => pt.TagId);
-
-            modelBuilder.Entity<ProductTag>()
-                .HasOne(pt => pt.Product)
-                .WithMany(x => x.ProductTags)
-                .HasForeignKey(pt => pt.ProductId);
+           
 
             modelBuilder.Entity<StaffAccount>(builder =>
             {
@@ -74,23 +52,7 @@ namespace e_shop.DataAccess
 
             });
 
-            modelBuilder.Entity<StaffRole>(builder =>
-            {
-                builder.HasKey(k => new
-                {
-                    k.StaffID,
-                    k.RoleId
-                });
-
-                builder.HasOne(x => x.StaffAccount)
-                .WithMany(x => x.StaffRoles)
-                .HasForeignKey(sr => sr.StaffID);
-
-                builder
-                .HasOne(sr => sr.Role)
-                .WithMany(x => x.StaffRoles)
-                .HasForeignKey(sr => sr.RoleId);
-            });
+          
 
 
 

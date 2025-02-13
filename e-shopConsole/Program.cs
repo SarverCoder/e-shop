@@ -2,9 +2,13 @@
 using e_shop.DataAccess;
 using e_shop.DataAccess.Services;
 
-Console.WriteLine("Hello, World!");
 
 using var context = new ShopContext();
 
-var service = new ProductService(context);
+var GetAllProducts = context.Products;
+
+foreach (var product in GetAllProducts)
+{
+    Console.WriteLine($"{product.ProductName}");
+}    
 
