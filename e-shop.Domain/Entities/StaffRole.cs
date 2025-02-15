@@ -11,8 +11,8 @@ namespace e_shop.Domain.Entities
         public int StaffID { get; set; }
         public int RoleId { get; set; } 
 
-        public StaffAccount StaffAccount { get; set; }
-        public Role Role { get; set; }
+        public virtual StaffAccount StaffAccount { get; set; }
+        public virtual Role Role { get; set; }
 
     }
 }

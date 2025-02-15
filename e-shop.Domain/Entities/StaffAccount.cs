@@ -21,6 +21,6 @@ namespace e_shop.Domain.Entities
         public int CreatedBy { get; set; }
         public int UpdateBy { get; set; }
 
-        public ICollection<StaffRole> StaffRoles { get; set; }
+        public virtual ICollection<StaffRole> StaffRoles { get; set; }
     }
 }

@@ -12,15 +12,18 @@ using e_shop.DataAccess;
 namespace e_shop.DataAccess.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    [Migration("20250209100520_AddedTags")]
-    partial class AddedTags
+    [Migration("20250215101719_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -45,8 +48,7 @@ namespace e_shop.DataAccess.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("text")
                         .HasColumnName("category_name");
 
                     b.Property<DateTime>("CreatedAt")
@@ -80,12 +82,12 @@ namespace e_shop.DataAccess.Migrations
                         .HasColumnName("updated_by");
 
                     b.HasKey("Id")
-                        .HasName("pk_category");
+                        .HasName("pk_categories");
 
                     b.HasIndex("ParentId")
-                        .HasDatabaseName("ix_category_parent_id");
+                        .HasDatabaseName("ix_categories_parent_id");
 
-                    b.ToTable("category", (string)null);
+                    b.ToTable("categories", (string)null);
                 });
 
             modelBuilder.Entity("e_shop.Domain.Entities.Product", b =>
@@ -98,7 +100,7 @@ namespace e_shop.DataAccess.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamptz")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
                     b.Property<int>("CreatedBy")
@@ -116,14 +118,12 @@ namespace e_shop.DataAccess.Migrations
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("text")
                         .HasColumnName("product_name");
 
                     b.Property<string>("ProductNote")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("text")
                         .HasColumnName("product_note");
 
                     b.Property<decimal>("ProductWeight")
@@ -144,18 +144,16 @@ namespace e_shop.DataAccess.Migrations
 
                     b.Property<string>("SKU")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("text")
                         .HasColumnName("sku");
 
                     b.Property<string>("ShortDescription")
                         .IsRequired()
-                        .HasMaxLength(165)
-                        .HasColumnType("character varying(165)")
+                        .HasColumnType("text")
                         .HasColumnName("short_description");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamptz")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
                     b.Property<int>("UpdatedBy")
@@ -208,6 +206,132 @@ namespace e_shop.DataAccess.Migrations
                     b.ToTable("product_tags", (string)null);
                 });
 
+            modelBuilder.Entity("e_shop.Domain.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.PrimitiveCollection<string[]>("Privilege")
+                        .IsRequired()
+                        .HasColumnType("text[]")
+                        .HasColumnName("privilege");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("role_name");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.Property<int>("UpdatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("updated_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_roles");
+
+                    b.ToTable("roles", (string)null);
+                });
+
+            modelBuilder.Entity("e_shop.Domain.Entities.StaffAccount", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean")
+                        .HasColumnName("active");
+
+                    b.Property<int>("CreatedBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("created_by");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("first_name");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("last_name");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password_hash");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("phone_number");
+
+                    b.Property<string>("ProfileImg")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("profile_img");
+
+                    b.Property<DateTime>("RegisteredAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("registered_at");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("update_at");
+
+                    b.Property<int>("UpdateBy")
+                        .HasColumnType("integer")
+                        .HasColumnName("update_by");
+
+                    b.HasKey("Id")
+                        .HasName("pk_staff_accounts");
+
+                    b.ToTable("staff_accounts", (string)null);
+                });
+
+            modelBuilder.Entity("e_shop.Domain.Entities.StaffRole", b =>
+                {
+                    b.Property<int>("StaffID")
+                        .HasColumnType("integer")
+                        .HasColumnName("staff_id");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("integer")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("StaffID", "RoleId")
+                        .HasName("pk_staff_roles");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_staff_roles_role_id");
+
+                    b.ToTable("staff_roles", (string)null);
+                });
+
             modelBuilder.Entity("e_shop.Domain.Entities.Tag", b =>
                 {
                     b.Property<int>("Id")
@@ -257,7 +381,7 @@ namespace e_shop.DataAccess.Migrations
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_category_category_parent_id");
+                        .HasConstraintName("fk_categories_categories_parent_id");
 
                     b.Navigation("ParentCategory");
                 });
@@ -269,7 +393,7 @@ namespace e_shop.DataAccess.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_product_categories_category_category_id");
+                        .HasConstraintName("fk_product_categories_categories_category_id");
 
                     b.HasOne("e_shop.Domain.Entities.Product", "Product")
                         .WithMany("ProductCategories")
@@ -304,6 +428,27 @@ namespace e_shop.DataAccess.Migrations
                     b.Navigation("Tag");
                 });
 
+            modelBuilder.Entity("e_shop.Domain.Entities.StaffRole", b =>
+                {
+                    b.HasOne("e_shop.Domain.Entities.Role", "Role")
+                        .WithMany("StaffRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_staff_roles_roles_role_id");
+
+                    b.HasOne("e_shop.Domain.Entities.StaffAccount", "StaffAccount")
+                        .WithMany("StaffRoles")
+                        .HasForeignKey("StaffID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_staff_roles_staff_accounts_staff_id");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("StaffAccount");
+                });
+
             modelBuilder.Entity("e_shop.Domain.Entities.Category", b =>
                 {
                     b.Navigation("ProductCategories");
@@ -314,6 +459,16 @@ namespace e_shop.DataAccess.Migrations
                     b.Navigation("ProductCategories");
 
                     b.Navigation("ProductTags");
+                });
+
+            modelBuilder.Entity("e_shop.Domain.Entities.Role", b =>
+                {
+                    b.Navigation("StaffRoles");
+                });
+
+            modelBuilder.Entity("e_shop.Domain.Entities.StaffAccount", b =>
+                {
+                    b.Navigation("StaffRoles");
                 });
 
             modelBuilder.Entity("e_shop.Domain.Entities.Tag", b =>

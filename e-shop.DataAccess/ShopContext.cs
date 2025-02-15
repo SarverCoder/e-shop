@@ -2,6 +2,7 @@
 using e_shop.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace e_shop.DataAccess
 {
@@ -16,10 +17,10 @@ namespace e_shop.DataAccess
         public DbSet<StaffRole> StaffRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
 
-        public ShopContext()
-        {
-            Database.EnsureCreated();
-        }
+        //public ShopContext()
+        //{
+        //    Database.EnsureCreated();
+        //}
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,6 +28,7 @@ namespace e_shop.DataAccess
              var ConnectionString = "Host=localhost;Port=5432;Username=postgres;Password=8544;Database=eCommerce";
 
             optionsBuilder
+                .UseLazyLoadingProxies()
                 .UseNpgsql(ConnectionString)
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .UseSnakeCaseNamingConvention();
@@ -40,6 +42,8 @@ namespace e_shop.DataAccess
             modelBuilder.ApplyConfiguration(new ProductTagConfiguration());
             modelBuilder.ApplyConfiguration(new StaffRoleConfiguration());
 
+           // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+           // Hammasini olish
            
 
             modelBuilder.Entity<StaffAccount>(builder =>
@@ -50,12 +54,12 @@ namespace e_shop.DataAccess
                 .HasMaxLength(100);
 
 
-            });
-
-          
-
-
+            });           
 
         }
+
+      
+
+
     }
 }

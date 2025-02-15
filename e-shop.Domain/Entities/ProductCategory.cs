@@ -20,7 +20,8 @@ namespace e_shop.Domain.Entities
 
 
 
-        public Product Product { get; set; }
-        public Category Category { get; set; }
+        public virtual Product Product { get; set; }
+        public virtual Category Category { get; set; }
+
     }
 }

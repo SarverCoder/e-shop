@@ -43,12 +43,12 @@ namespace e_shop.Domain.Entities
         
         public DateTime UpdatedAt { get; set; }
 
-        [Required]
+       
         public int CreatedBy { get; set; }
         public int UpdatedBy { get; set; }
 
-        public ICollection<ProductCategory> ProductCategories { get; set; }
-        public ICollection<ProductTag> ProductTags { get; set; }
+        public virtual ICollection<ProductCategory> ProductCategories { get; set; }
+        public virtual ICollection<ProductTag> ProductTags { get; set; }
 
 
     }

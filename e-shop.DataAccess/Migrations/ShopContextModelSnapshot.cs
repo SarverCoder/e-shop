@@ -17,7 +17,10 @@ namespace e_shop.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -42,8 +45,7 @@ namespace e_shop.DataAccess.Migrations
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("character varying(255)")
+                        .HasColumnType("text")
                         .HasColumnName("category_name");
 
                     b.Property<DateTime>("CreatedAt")
@@ -77,12 +79,12 @@ namespace e_shop.DataAccess.Migrations
                         .HasColumnName("updated_by");
 
                     b.HasKey("Id")
-                        .HasName("pk_category");
+                        .HasName("pk_categories");
 
                     b.HasIndex("ParentId")
-                        .HasDatabaseName("ix_category_parent_id");
+                        .HasDatabaseName("ix_categories_parent_id");
 
-                    b.ToTable("category", (string)null);
+                    b.ToTable("categories", (string)null);
                 });
 
             modelBuilder.Entity("e_shop.Domain.Entities.Product", b =>
@@ -376,7 +378,7 @@ namespace e_shop.DataAccess.Migrations
                         .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_category_category_parent_id");
+                        .HasConstraintName("fk_categories_categories_parent_id");
 
                     b.Navigation("ParentCategory");
                 });
@@ -388,7 +390,7 @@ namespace e_shop.DataAccess.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_product_categories_category_category_id");
+                        .HasConstraintName("fk_product_categories_categories_category_id");
 
                     b.HasOne("e_shop.Domain.Entities.Product", "Product")
                         .WithMany("ProductCategories")
