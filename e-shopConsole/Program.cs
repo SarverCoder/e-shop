@@ -17,6 +17,38 @@ using var context = new ShopContext();
 
 //};
 
+var categoryService = new CategoryService(context);
+
+
+var product = await categoryService.GetByIdCategory(1);
+
+Console.WriteLine($"{product.Id}: Name:{product.CategoryName} ");
+
+//var productCategory = new ProductCategory()
+//{
+//    Category = new Category()
+//    {
+//        Id = 8,
+//        ParentId = 8,
+//        CategoryName = "Airways",
+//        CategoryDescription = " iusfhebiuea",
+//        Icon = "fwkejbd",
+//        ImagePath = "fkjenb"
+//    },
+
+//    Product = new Product()
+//    {
+//        Id = 1,
+//        ProductName = "Boing",
+//        SKU = "fewjnjnf",
+//        ProductDescription = "fwekjdshj",
+//        ShortDescription = "Aziz"
+
+//    }
+//};
+
+//context.Add(productCategory);
+//context.SaveChanges();
 
 
 

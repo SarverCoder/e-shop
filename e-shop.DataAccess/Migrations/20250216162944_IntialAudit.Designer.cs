@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using e_shop.DataAccess;
@@ -11,9 +12,11 @@ using e_shop.DataAccess;
 namespace e_shop.DataAccess.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250216162944_IntialAudit")]
+    partial class IntialAudit
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,10 +42,12 @@ namespace e_shop.DataAccess.Migrations
                         .HasColumnName("active");
 
                     b.Property<string>("CategoryDescription")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("category_description");
 
                     b.Property<string>("CategoryName")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("category_name");
 
@@ -55,10 +60,12 @@ namespace e_shop.DataAccess.Migrations
                         .HasColumnName("created_by");
 
                     b.Property<string>("Icon")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("icon");
 
                     b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("image_path");
 
@@ -83,64 +90,6 @@ namespace e_shop.DataAccess.Migrations
                     b.ToTable("categories", (string)null);
                 });
 
-            modelBuilder.Entity("e_shop.Domain.Entities.Order", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("OrderApprovedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("order_approved_at");
-
-                    b.Property<DateTime>("OrderDeliveredCarrierDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("order_delivered_carrier_date");
-
-                    b.Property<DateTime>("OrderDeliveredCustomerDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("order_delivered_customer_date");
-
-                    b.HasKey("Id")
-                        .HasName("pk_orders");
-
-                    b.ToTable("orders", (string)null);
-                });
-
-            modelBuilder.Entity("e_shop.Domain.Entities.OrderItem", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer")
-                        .HasColumnName("order_id");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer")
-                        .HasColumnName("product_id");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric")
-                        .HasColumnName("price");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("integer")
-                        .HasColumnName("quantity");
-
-                    b.HasKey("OrderId", "ProductId")
-                        .HasName("pk_order_items");
-
-                    b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_order_items_product_id");
-
-                    b.ToTable("order_items", (string)null);
-                });
-
             modelBuilder.Entity("e_shop.Domain.Entities.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -163,14 +112,17 @@ namespace e_shop.DataAccess.Migrations
                         .HasColumnName("discount_price");
 
                     b.Property<string>("ProductDescription")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("product_description");
 
                     b.Property<string>("ProductName")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("product_name");
 
                     b.Property<string>("ProductNote")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("product_note");
 
@@ -191,10 +143,12 @@ namespace e_shop.DataAccess.Migrations
                         .HasColumnName("regular_price");
 
                     b.Property<string>("SKU")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("sku");
 
                     b.Property<string>("ShortDescription")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("short_description");
 
@@ -432,27 +386,6 @@ namespace e_shop.DataAccess.Migrations
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("e_shop.Domain.Entities.OrderItem", b =>
-                {
-                    b.HasOne("e_shop.Domain.Entities.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_order_items_orders_order_id");
-
-                    b.HasOne("e_shop.Domain.Entities.Product", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_order_items_products_product_id");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("e_shop.Domain.Entities.ProductCategory", b =>
                 {
                     b.HasOne("e_shop.Domain.Entities.Category", "Category")
@@ -521,15 +454,8 @@ namespace e_shop.DataAccess.Migrations
                     b.Navigation("ProductCategories");
                 });
 
-            modelBuilder.Entity("e_shop.Domain.Entities.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
             modelBuilder.Entity("e_shop.Domain.Entities.Product", b =>
                 {
-                    b.Navigation("OrderItems");
-
                     b.Navigation("ProductCategories");
 
                     b.Navigation("ProductTags");

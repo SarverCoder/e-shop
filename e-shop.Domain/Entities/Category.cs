@@ -11,27 +11,30 @@ namespace e_shop.Domain.Entities;
 
 
 
-public class Category
+public class Category : IAuditable
 {
-   
+
+    public Category()
+    {
+        ProductCategories = new List<ProductCategory>();
+    }
+
     public int Id { get; set; }
     public int ParentId { get; set; }
-    [ForeignKey("ParentId")]
+    [NotMapped]
     public virtual Category ParentCategory { get; set; }
-    public string CategoryName { get; set; }
-    public string CategoryDescription { get; set; }
-    public string Icon { get; set; }
-    public string ImagePath { get; set; }
+    public string? CategoryName { get; set; }
+    public string? CategoryDescription { get; set; }
+    public string? Icon { get; set; }
+    public string? ImagePath { get; set; }
 
     public bool Active { get; set; } 
 
-   
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
+    public DateTime CreatedAt { get ; set; }
+    public DateTime? UpdatedAt { get ; set; }
     public int CreatedBy { get; set; }
-    public int UpdatedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+   
+    
     public virtual ICollection<ProductCategory> ProductCategories { get; set; }
-
-
 }

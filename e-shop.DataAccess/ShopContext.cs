@@ -8,6 +8,8 @@ namespace e_shop.DataAccess
 {
     public class ShopContext : DbContext
     {
+        
+
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
@@ -16,6 +18,8 @@ namespace e_shop.DataAccess
         public DbSet<StaffAccount> StaffAccounts { get; set; }
         public DbSet<StaffRole> StaffRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         //public ShopContext()
         //{
@@ -28,10 +32,11 @@ namespace e_shop.DataAccess
              var ConnectionString = "Host=localhost;Port=5432;Username=postgres;Password=8544;Database=eCommerce";
 
             optionsBuilder
-                .UseLazyLoadingProxies()
+               // .UseLazyLoadingProxies()
                 .UseNpgsql(ConnectionString)
                 .LogTo(Console.WriteLine, LogLevel.Information)
-                .UseSnakeCaseNamingConvention();
+                .UseSnakeCaseNamingConvention()
+                .AddInterceptors(new AuditInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -41,6 +46,7 @@ namespace e_shop.DataAccess
             modelBuilder.ApplyConfiguration(new ProductCategoryConfiguration());
             modelBuilder.ApplyConfiguration(new ProductTagConfiguration());
             modelBuilder.ApplyConfiguration(new StaffRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
 
            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
            // Hammasini olish
@@ -48,17 +54,32 @@ namespace e_shop.DataAccess
 
             modelBuilder.Entity<StaffAccount>(builder =>
             {
-               
-
                 builder.Property(x => x.Id)
                 .HasMaxLength(100);
-
-
             });           
 
         }
 
-      
+        //public override int SaveChanges()
+        //{
+        //    var entries = ChangeTracker.Entries();
+
+        //    var addedEntries = entries.Where(e => e.State == EntityState.Added);
+
+        //    var updateEntries = entries.Where(x => x.State == EntityState.Modified);
+
+        //    foreach( var entry in addedEntries )
+        //    {
+        //        if (entry.Entity is IAuditable entity)
+        //        {
+        //            entity.CreatedAt = DateTime.UtcNow;
+        //            entity.CreatedBy = 1;
+        //        }
+        //    }
+        //    return base.SaveChanges();
+        //}
+
+
 
 
     }

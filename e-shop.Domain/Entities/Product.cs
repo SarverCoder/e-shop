@@ -8,16 +8,22 @@ using System.Threading.Tasks;
 
 namespace e_shop.Domain.Entities
 {
-    public class Product
+    public class Product : IAuditable
     {
-       
+        public Product()
+        {
+            ProductCategories = new List<ProductCategory>();
+            ProductTags = new List<ProductTag>();
+            OrderItems = new List<OrderItem>();
+        }
+
         public int Id { get; set; }
 
        
-        public string ProductName { get; set; }
+        public string? ProductName { get; set; }
 
        
-        public string SKU { get; set; }
+        public string? SKU { get; set; }
 
        
         public decimal RegularPrice { get; set; }
@@ -27,29 +33,24 @@ namespace e_shop.Domain.Entities
         public int Quantity { get; set; }
 
        
-        public string ShortDescription { get; set; }
-        public string ProductDescription { get; set; }
+        public string? ShortDescription { get; set; }
+        public string? ProductDescription { get; set; }
 
        
         public decimal ProductWeight { get; set; }
 
        
-        public string ProductNote { get; set; }
+        public string? ProductNote { get; set; }
         public bool Published { get; set; }
 
         
-        public DateTime CreatedAt { get; set; }
-
+        public DateTime CreatedAt { get ; set ; }
+        public DateTime? UpdatedAt { get ; set ; }
+        public int CreatedBy { get ; set; }
+        public int? UpdatedBy { get ; set; }
         
-        public DateTime UpdatedAt { get; set; }
-
-       
-        public int CreatedBy { get; set; }
-        public int UpdatedBy { get; set; }
-
         public virtual ICollection<ProductCategory> ProductCategories { get; set; }
         public virtual ICollection<ProductTag> ProductTags { get; set; }
-
-
+        public virtual ICollection<OrderItem> OrderItems { get; set; }
     }
 }
