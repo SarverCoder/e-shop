@@ -1,5 +1,6 @@
 ﻿using e_shop.DataAccess.ModelConfigurations;
 using e_shop.Domain.Entities;
+using e_shop.Domain.ViewsModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
@@ -8,7 +9,8 @@ namespace e_shop.DataAccess
 {
     public class ShopContext : DbContext
     {
-        
+        public ShopContext(DbContextOptions<ShopContext> options) : base(options) { }
+
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
@@ -20,6 +22,9 @@ namespace e_shop.DataAccess
         public DbSet<Role> Roles { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<LastYearOrderModel> LastYearOrderModels { get; set; }
+        public DbSet<OrdersBetween> BetweenOrders { get; set; }
 
         //public ShopContext()
         //{
@@ -29,11 +34,11 @@ namespace e_shop.DataAccess
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-             var ConnectionString = "Host=localhost;Port=5432;Username=postgres;Password=8544;Database=eCommerce";
+             //var ConnectionString = "Host=localhost;Port=5432;Username=postgres;Password=8544;Database=eCommerce";
 
             optionsBuilder
                // .UseLazyLoadingProxies()
-                .UseNpgsql(ConnectionString)
+               // .UseNpgsql(ConnectionString)
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .UseSnakeCaseNamingConvention()
                 .AddInterceptors(new AuditInterceptor());
@@ -48,15 +53,31 @@ namespace e_shop.DataAccess
             modelBuilder.ApplyConfiguration(new StaffRoleConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemConfiguration());
 
-           // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-           // Hammasini olish
-           
+            // modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            // Hammasini olish
+
+            modelBuilder.Entity<LastYearOrderModel>()
+                .ToView("LastYearOrdersView")
+                .HasNoKey();
+
+            modelBuilder.Entity<OrdersBetween>()
+                .ToSqlQuery(@"select * from public.""SP_GetOrders""('2024-01-01', '2024-12-31')")
+                .HasNoKey();
+
+
 
             modelBuilder.Entity<StaffAccount>(builder =>
             {
                 builder.Property(x => x.Id)
                 .HasMaxLength(100);
-            });           
+            });
+
+            modelBuilder.Entity<Order>()
+                .HasOne(x => x.Customer)
+                .WithMany(x => x.Orders)
+                .HasForeignKey(x => x.CustomerId);
+
+
 
         }
 

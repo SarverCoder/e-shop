@@ -10,10 +10,17 @@ namespace e_shop.WebApi.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly ShopContext context;
+
+        public ProductsController(ShopContext _context)
+        {
+            context = _context;
+        }
+
         [HttpGet("all-products")]
         public IActionResult GetAllProducts()
         {
-            using var context = new ShopContext();
+            
             var products = context.Products
                 .Select(r => new ProductDto
                 {
@@ -50,7 +57,7 @@ namespace e_shop.WebApi.Controllers
                 Published = productDto.Published
             };
 
-            await using var context = new ShopContext();
+            
             await context.Products.AddAsync(product);
             await context.SaveChangesAsync();
             return Ok(product);
@@ -60,7 +67,7 @@ namespace e_shop.WebApi.Controllers
         [HttpDelete("delete-product")]
         public async Task<IActionResult> DeleteProduct([FromQuery] int id)
         {
-            await using var context = new ShopContext();
+           
             var product = await context.Products.FindAsync(id);
             if (product == null)
             {

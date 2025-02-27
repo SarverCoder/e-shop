@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using e_shop.DataAccess;
@@ -11,9 +12,11 @@ using e_shop.DataAccess;
 namespace e_shop.DataAccess.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250225121738_AddedCustomers")]
+    partial class AddedCustomers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -458,22 +461,6 @@ namespace e_shop.DataAccess.Migrations
                         .HasName("pk_tags");
 
                     b.ToTable("tags", (string)null);
-                });
-
-            modelBuilder.Entity("e_shop.Domain.ViewsModels.LastYearOrderModel", b =>
-                {
-                    b.Property<string>("OrderBy")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("order_by");
-
-                    b.Property<DateTime?>("OrderDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("order_date");
-
-                    b.ToTable((string)null);
-
-                    b.ToView("public.LastYearOrdersView", (string)null);
                 });
 
             modelBuilder.Entity("e_shop.Domain.Entities.Order", b =>

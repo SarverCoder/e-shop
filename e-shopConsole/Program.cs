@@ -4,7 +4,7 @@ using e_shop.DataAccess.Services;
 using e_shop.Domain.Entities;
 
 
-using var context = new ShopContext();
+Console.WriteLine("Hello world");
 
 //var categories = new Category()
 //{
@@ -17,12 +17,9 @@ using var context = new ShopContext();
 
 //};
 
-var categoryService = new CategoryService(context);
 
 
-var product = await categoryService.GetByIdCategory(1);
 
-Console.WriteLine($"{product.Id}: Name:{product.CategoryName} ");
 
 //var productCategory = new ProductCategory()
 //{
@@ -53,3 +50,21 @@ Console.WriteLine($"{product.Id}: Name:{product.CategoryName} ");
 
 
 
+//int NumOfSubarrays(int[] arr)
+//{
+//    int summ = 0;   
+
+//    for (int i=0; i<arr.Length; i++)
+//    {
+       
+//        for(int j = i + 1; j <= arr.Length; j++)
+//        {
+//            if (arr[i] % 2 == 1 && arr[j])
+//        }
+        
+//    }
+
+//    return summ == 0 ? 0 : summ;
+
+
+//}

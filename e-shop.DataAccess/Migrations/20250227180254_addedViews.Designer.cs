@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using e_shop.DataAccess;
@@ -11,9 +12,11 @@ using e_shop.DataAccess;
 namespace e_shop.DataAccess.Migrations
 {
     [DbContext(typeof(ShopContext))]
-    partial class ShopContextModelSnapshot : ModelSnapshot
+    [Migration("20250227180254_addedViews")]
+    partial class addedViews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -473,7 +476,7 @@ namespace e_shop.DataAccess.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("public.LastYearOrdersView", (string)null);
+                    b.ToView("LastYearOrdersView", (string)null);
                 });
 
             modelBuilder.Entity("e_shop.Domain.Entities.Order", b =>

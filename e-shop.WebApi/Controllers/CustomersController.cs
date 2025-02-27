@@ -10,10 +10,17 @@ namespace e_shop.WebApi.Controllers;
 [ApiController]
 public class CustomersController : ControllerBase
 {
+    private readonly ShopContext context;
+
+    public CustomersController(ShopContext _context)
+    {
+        context = _context;
+    }
+
     [HttpGet("all-customers")]
     public IActionResult GetAllCustomers()
     {
-        using var context = new ShopContext();
+      
 
         var customers = context.Categories
             .Select(r => new CategoryDto()
@@ -38,7 +45,7 @@ public class CustomersController : ControllerBase
             Icon = categoryDto.Icon
         };
 
-        await using var context = new ShopContext();
+       
         await context.Categories.AddAsync(category);    
         await context.SaveChangesAsync();
         return Ok(category);
@@ -48,7 +55,7 @@ public class CustomersController : ControllerBase
 
     public async Task<IActionResult> RemoveCustomer(int id)
     {
-        await using var context = new ShopContext();
+       
         var category = await context.Categories.FindAsync(id);
         if (category == null)
         {
