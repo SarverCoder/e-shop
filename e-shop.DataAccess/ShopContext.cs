@@ -32,18 +32,7 @@ namespace e_shop.DataAccess
         //}
 
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-             //var ConnectionString = "Host=localhost;Port=5432;Username=postgres;Password=8544;Database=eCommerce";
-
-            optionsBuilder
-               // .UseLazyLoadingProxies()
-               // .UseNpgsql(ConnectionString)
-                .LogTo(Console.WriteLine, LogLevel.Information)
-                .UseSnakeCaseNamingConvention()
-                .AddInterceptors(new AuditInterceptor());
-        }
-
+      
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 

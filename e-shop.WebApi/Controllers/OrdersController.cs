@@ -1,7 +1,7 @@
 ﻿using e_shop.DataAccess;
 using e_shop.Domain.Entities;
 using e_shop.Domain.ViewsModels;
-using e_shop.WebApi.Dtos;
+using e_shop.Application.Dtos;   
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,14 +20,21 @@ namespace e_shop.WebApi.Controllers
         }
 
         [HttpGet("filtered-orders")]
-        public async Task<ActionResult<IEnumerable<OrdersBetween>>> GetFunction([FromQuery] DateTime from, [FromQuery] DateTime to)
+        public async Task<IActionResult> GetFunction([FromQuery] DateTime from, [FromQuery] DateTime to)
         {
             DateTime fromDate = DateTime.SpecifyKind(from, DateTimeKind.Utc);
             DateTime toDate = DateTime.SpecifyKind(to, DateTimeKind.Utc);
 
+            
+
             var orders = await _context.BetweenOrders
                 .FromSqlRaw(@"SELECT * FROM public.""SP_GetOrders""({0}, {1})", fromDate, toDate)
                 .ToListAsync();
+
+            if(orders is null)
+            {
+                return NotFound();
+            }
 
             return Ok(orders);
         }

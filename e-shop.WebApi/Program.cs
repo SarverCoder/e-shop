@@ -9,8 +9,14 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();
 
+
 builder.Services.AddDbContext<ShopContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+                // .UseLazyLoadingProxies()
+                // .UseNpgsql(ConnectionString)
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .UseSnakeCaseNamingConvention()
+                .AddInterceptors(new AuditInterceptor())
 );
 
 var app = builder.Build();

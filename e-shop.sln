@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-shop.DataAccess", "e-shop
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-shop.WebApi", "e-shop.WebApi\e-shop.WebApi.csproj", "{F759C8CD-C175-4D40-A3E2-19B300CCEA1F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "e-shop.Application", "e-shop.Application\e-shop.Application.csproj", "{76D37EF8-19C6-470E-B222-0D59884FD47C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +35,15 @@ Global
 		{F759C8CD-C175-4D40-A3E2-19B300CCEA1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F759C8CD-C175-4D40-A3E2-19B300CCEA1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F759C8CD-C175-4D40-A3E2-19B300CCEA1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76D37EF8-19C6-470E-B222-0D59884FD47C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76D37EF8-19C6-470E-B222-0D59884FD47C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76D37EF8-19C6-470E-B222-0D59884FD47C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76D37EF8-19C6-470E-B222-0D59884FD47C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BE881815-44E6-4DA5-A467-F03A61A5AF4C}
 	EndGlobalSection
 EndGlobal

@@ -1,4 +1,4 @@
-﻿namespace e_shop.WebApi.Dtos
+﻿namespace e_shop.Application.Dtos
 {
     public class OrderDto
     {
